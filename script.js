@@ -70,3 +70,57 @@ function Calculator() {
 }
 
 const myCalculator = new Calculator();
+
+//DOM Queries
+const display = document.querySelector('.display-area');
+// const inputButtons = Array.from(document.querySelectorAll('.input-button'));
+const buttonParent = document.querySelector('.button-area');
+
+const numericButtons = {
+    num0Btn: 0,
+    num1Btn: 1,
+    num2Btn: 2,
+    num3Btn: 3,
+    num4Btn: 4,
+    num5Btn: 5,
+    num6Btn: 6,
+    num7Btn: 7,
+    num8Btn: 8,
+    num9Btn: 9,
+}
+
+const operatorButtons = {
+    addBtn: "+",
+    subtractBtn: "-",
+    multiplyBtn: "*",
+    divideBtn: "/",
+    resultBtn: "=",
+}
+
+const methodButtons = {
+    // decimalBtn: ".",
+    clearBtn: clearDisplay,
+    // deleteBtn: "",
+    // emptyBtn: "",
+}
+
+function setDisplay(str) {
+    display.textContent = str;
+}
+function clearDisplay(initial = '') {
+    display.textContent = initial;
+}
+
+setDisplay(0);
+
+buttonParent.addEventListener('click', (e) => {
+    let btnId = e.target.id;
+
+    if (btnId in numericButtons) {
+        setDisplay(numericButtons[btnId]);
+    }else if(btnId in operatorButtons) {
+        setDisplay(operatorButtons[btnId]);
+    }else if(btnId in methodButtons) {
+        methodButtons[btnId](0);
+    }
+});
