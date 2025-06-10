@@ -23,32 +23,44 @@ body {
 .display-area {
     flex: 1;
     background-color: aquamarine;
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    font-size: xx-large;
+    font-weight: bold;
+    padding: 16px;
 }
 
 .button-area {
     flex: 2;
     display: flex;
 }
+
 .left-section {
     flex: 3;
     display: flex;
     flex-direction: column;
 }
+
 .right-section {
     flex: 1;
     display: flex;
 }
+
 .button-row,
 .button-column {
     flex: 1;
     display: flex;
 }
+
 .button-row {
     flex-direction: row;
 }
+
 .button-column {
     flex-direction: column;
 }
+
 .input-button {
     flex: 1;
     font-size: x-large;
