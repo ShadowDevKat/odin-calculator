@@ -1,72 +1,32 @@
 function Calculator() {
-    let operand1 = 0;
-    let operand2 = 0;
-    let operation = '';
-    let result = 0;
-    let add = function () {
-        result = operand1 + operand2;
+    this.add = function (a, b) {
+        return a + b;
     };
-    let subtract = function () {
-        result = operand1 - operand2;
+    this.subtract = function (a, b) {
+        return a - b;
     };
-    let multiply = function () {
-        result = operand1 * operand2;
+    this.multiply = function (a, b) {
+        return a * b;
     };
-    let divide = function () {
-        result = operand1 / operand2;
-    };
-    this.reset = function () {
-        operand1 = 0;
-        operand2 = 0;
-        operation = '';
-        result = 0;
+    this.divide = function (a, b) {
+        return a / b;
     };
     this.operate = function (a, b, op) {
-        operand1 = Number(a);
-        operand2 = Number(b);
+        a = Number(a);
+        b = Number(b);
         switch (op) {
             case '+':
-                operation = op;
-                add();
-                break;
+                return this.add(a, b);
             case '-':
-                operation = op;
-                subtract();
-                break;
+                return this.subtract(a, b);
             case '*':
-                operation = op;
-                multiply();
-                break;
+                return this.multiply(a, b);
             case '/':
-                operation = op;
-                divide();
-                break;
+                return this.divide(a, b);
             default:
-                this.reset();
                 break;
         }
-        return result;
     };
-    Object.defineProperty(this, 'operand1', {
-        get: function () {
-            return operand1;
-        }
-    });
-    Object.defineProperty(this, 'operand2', {
-        get: function () {
-            return operand2;
-        }
-    });
-    Object.defineProperty(this, 'operation', {
-        get: function () {
-            return operation;
-        }
-    });
-    Object.defineProperty(this, 'result', {
-        get: function () {
-            return result;
-        }
-    });
 }
 
 const myCalculator = new Calculator();
@@ -134,7 +94,6 @@ let operator = '';
 let hasOperator = false;
 
 function resetCalculation() {
-    myCalculator.reset();
     operandOne = '';
     operandTwo = '';
     operator = '';
