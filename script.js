@@ -31,6 +31,18 @@ function Calculator() {
 }
 function Operand() {
     this.value = '';
+    this.updateValue = function (digit) {
+        if (this.value.length === 1 && this.value === '0') {
+            this.value = digit;
+        } else {
+            this.value += digit;
+        }
+    }
+    this.deleteLastDigit = function () {
+        if (this.value.length >= 2) {
+            this.value = this.value.substring(0, this.value.length - 1);
+        }
+    }
     this.isEmpty = function () {
         return this.value.length === 0;
     }
@@ -51,17 +63,11 @@ function Operator() {
     }
 }
 
-//Object Variables
-const myCalculator = new Calculator();
-const operandOne = new Operand();
-const operandTwo = new Operand();
-const operator = new Operator();
-
 //DOM Queries
 const display = document.querySelector('.display-area');
-// const inputButtons = Array.from(document.querySelectorAll('.input-button'));
 const buttonParent = document.querySelector('.button-area');
 
+//Event handling
 const numericButtons = {
     num0Btn: '0',
     num1Btn: '1',
@@ -86,19 +92,9 @@ const methodButtons = {
     // decimalBtn: ".",
     clearBtn: clearDisplay,
     resultBtn: computeResult,
-    // deleteBtn: "",
+    deleteBtn: handleDelete,
     // emptyBtn: "",
 }
-
-function setDisplay(str) {
-    display.textContent = str;
-}
-function clearDisplay() {
-    display.textContent = 0;
-    resetCalculation();
-}
-
-setDisplay(0);
 
 buttonParent.addEventListener('click', (e) => {
     let btnId = e.target.id;
@@ -114,32 +110,85 @@ buttonParent.addEventListener('click', (e) => {
     }
 });
 
+//Display Methods
+function setDisplay(str) {
+    display.textContent = str;
+}
+function clearDisplay() {
+    display.textContent = 0;
+    resetCalculation();
+}
+function updateDisplay() {
+    if (result.length === 0) {
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
+    } else {
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
+    }
+}
+
+//Variables
+const myCalculator = new Calculator();
+const operandOne = new Operand();
+const operandTwo = new Operand();
+const operator = new Operator();
+let lastResult = '';
+let result = '';
+
+function init() {
+    operandOne.updateValue(0);
+    operator.value = '';
+    operandTwo.value = '';
+    lastResult = '';
+    result = '';
+}
+
+init();
+
+//Input handlers
+function handleNumeric(digit) {
+    if (operator.isEmpty()) {
+        operandOne.updateValue(digit);
+    }
+    else {
+        operandTwo.updateValue(digit);
+    }
+    updateDisplay();
+}
+function handleOperator(op) {
+    if (!operandOne.isEmpty() && operator.isEmpty()) {
+        operator.value = op;
+    } else if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
+        computeResult();
+        operandOne.updateValue(lastResult);
+        operator.value = op;
+    }
+    updateDisplay();
+}
+function computeResult() {
+    if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
+        result = myCalculator.operate(operandOne.value, operandTwo.value, operator.value);
+        lastResult = result;
+        updateDisplay();
+        resetCalculation();
+    }
+}
+function handleDelete() {
+    //find current operand
+    let currentOperand = null;
+    if (!operandOne.isEmpty() && operator.isEmpty()) {
+        currentOperand = operandOne;
+    } else if (!operator.isEmpty()) {
+        currentOperand = operandTwo;
+    }
+
+    if (currentOperand) {
+        currentOperand.deleteLastDigit();
+    }
+    updateDisplay();
+}
 function resetCalculation() {
     operandOne.clear();
     operandTwo.clear();
     operator.clear();
-}
-
-function handleNumeric(digit) {
-    if(operator.isEmpty()) {
-        operandOne.value += digit;
-        setDisplay(`${operandOne.value}`);
-    }
-    else {
-        operandTwo.value += digit;
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
-    }
-}
-function handleOperator(op) {
-    if(!operandOne.isEmpty() && operator.isEmpty()) {
-        operator.value = op;
-        setDisplay(`${operandOne.value} ${operator.value}`);
-    }
-}
-function computeResult() {
-    if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
-        let result = myCalculator.operate(operandOne.value, operandTwo.value, operator.value);
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
-        resetCalculation();
-    }
+    result = '';
 }
