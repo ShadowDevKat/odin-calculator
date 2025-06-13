@@ -31,11 +31,13 @@ function Calculator() {
 }
 function Operand() {
     this.value = '';
-    this.updateValue = function (digit) {
-        if (this.value.length === 1 && this.value === '0') {
-            this.value = digit;
+    this.updateValue = function (inputVal) {
+        if (inputVal === '.' && !this.isEmpty() && !this.hasDecimal()) {
+            this.value += inputVal;
+        } else if (this.value.length === 1 && this.value === '0') {
+            this.value = inputVal;
         } else {
-            this.value += digit;
+            this.value += inputVal;
         }
     }
     this.deleteLastDigit = function () {
@@ -48,6 +50,11 @@ function Operand() {
     }
     this.hasDecimal = function () {
         return this.value.indexOf('.') === -1 ? false : true;
+    }
+    this.hasValueAfterDecimal = function () {
+        if (this.hasDecimal()) {
+            return this.value.indexOf('.') === this.value.length - 1 ? false : true;
+        }
     }
     this.clear = function () {
         this.value = '';
@@ -95,6 +102,7 @@ function resetAndDisplay() {
     reset();
     updateDisplay();
 }
+reset();
 
 //Event handling
 const buttonParent = document.querySelector('.button-area');
@@ -110,6 +118,7 @@ const numericButtons = {
     num7Btn: '7',
     num8Btn: '8',
     num9Btn: '9',
+    decimalBtn: ".",
 }
 
 const operatorButtons = {
@@ -120,7 +129,6 @@ const operatorButtons = {
 }
 
 const methodButtons = {
-    // decimalBtn: ".",
     clearBtn: resetAndDisplay,
     resultBtn: computeResult,
     deleteBtn: handleDelete,
@@ -141,7 +149,7 @@ buttonParent.addEventListener('click', (e) => {
     }
 });
 
-//Common Checks
+//Common
 function canCalculate() {
     return !operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty();
 }
@@ -154,16 +162,36 @@ function getCurrentOperand() {
     }
     return currentOperand;
 }
+function canUseOperand() {
+    let currentOperand = getCurrentOperand();
+    if (currentOperand) {
+        if (!currentOperand.hasDecimal()) {
+            return true;
+        }
+        else if (currentOperand.hasValueAfterDecimal()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 //Input handlers
-function handleNumeric(digit) {
+function handleNumeric(inputVal) {
     const currOperand = getCurrentOperand();
     if (currOperand) {
-        currOperand.updateValue(digit);
+        if(currOperand.hasDecimal() && inputVal === '.') {
+            return;
+        }
+        currOperand.updateValue(inputVal);
     }
     updateDisplay();
 }
 function handleOperator(op) {
+    if (!canUseOperand()) {
+        return;
+    }
+
     if (operandOne.value === '0' && operator.isEmpty && lastResult !== '') {
         operandOne.updateValue(lastResult);
         operator.value = op;
@@ -177,6 +205,9 @@ function handleOperator(op) {
     updateDisplay();
 }
 function computeResult() {
+    if (!canUseOperand()) {
+        return;
+    }
     if (canCalculate()) {
         result = myCalculator.operate(operandOne.value, operandTwo.value, operator.value);
         lastResult = result;
