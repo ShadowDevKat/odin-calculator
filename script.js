@@ -145,14 +145,21 @@ buttonParent.addEventListener('click', (e) => {
 function canCalculate() {
     return !operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty();
 }
+function getCurrentOperand() {
+    let currentOperand = null;
+    if (operator.isEmpty()) {
+        currentOperand = operandOne;
+    } else if (!operator.isEmpty()) {
+        currentOperand = operandTwo;
+    }
+    return currentOperand;
+}
 
 //Input handlers
 function handleNumeric(digit) {
-    if (operator.isEmpty()) {
-        operandOne.updateValue(digit);
-    }
-    else {
-        operandTwo.updateValue(digit);
+    const currOperand = getCurrentOperand();
+    if (currOperand) {
+        currOperand.updateValue(digit);
     }
     updateDisplay();
 }
@@ -178,16 +185,9 @@ function computeResult() {
     }
 }
 function handleDelete() {
-    //find current operand
-    let currentOperand = null;
-    if (!operandOne.isEmpty() && operator.isEmpty()) {
-        currentOperand = operandOne;
-    } else if (!operator.isEmpty()) {
-        currentOperand = operandTwo;
-    }
-
-    if (currentOperand) {
-        currentOperand.deleteLastDigit();
+    const currOperand = getCurrentOperand();
+    if (currOperand) {
+        currOperand.deleteLastDigit();
     }
     updateDisplay();
 }
