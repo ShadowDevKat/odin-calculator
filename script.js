@@ -63,11 +63,42 @@ function Operator() {
     }
 }
 
-//DOM Queries
+//Display Methods
 const display = document.querySelector('.display-area');
-const buttonParent = document.querySelector('.button-area');
+function setDisplay(str) {
+    display.textContent = str;
+}
+function updateDisplay() {
+    if (result.length === 0) {
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
+    } else {
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
+    }
+}
+
+//Variables
+const myCalculator = new Calculator();
+const operandOne = new Operand();
+const operandTwo = new Operand();
+const operator = new Operator();
+let lastResult = '';
+let result = '';
+
+function reset() {
+    operandOne.value = '0';
+    operator.value = '';
+    operandTwo.value = '';
+    result = '';
+}
+function resetAndDisplay() {
+    lastResult = '';
+    reset();
+    updateDisplay();
+}
 
 //Event handling
+const buttonParent = document.querySelector('.button-area');
+
 const numericButtons = {
     num0Btn: '0',
     num1Btn: '1',
@@ -90,7 +121,7 @@ const operatorButtons = {
 
 const methodButtons = {
     // decimalBtn: ".",
-    clearBtn: clearDisplay,
+    clearBtn: resetAndDisplay,
     resultBtn: computeResult,
     deleteBtn: handleDelete,
     // emptyBtn: "",
@@ -110,39 +141,10 @@ buttonParent.addEventListener('click', (e) => {
     }
 });
 
-//Display Methods
-function setDisplay(str) {
-    display.textContent = str;
+//Common Checks
+function canCalculate() {
+    return !operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty();
 }
-function clearDisplay() {
-    display.textContent = 0;
-    resetCalculation();
-}
-function updateDisplay() {
-    if (result.length === 0) {
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
-    } else {
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
-    }
-}
-
-//Variables
-const myCalculator = new Calculator();
-const operandOne = new Operand();
-const operandTwo = new Operand();
-const operator = new Operator();
-let lastResult = '';
-let result = '';
-
-function init() {
-    operandOne.updateValue(0);
-    operator.value = '';
-    operandTwo.value = '';
-    lastResult = '';
-    result = '';
-}
-
-init();
 
 //Input handlers
 function handleNumeric(digit) {
@@ -155,9 +157,12 @@ function handleNumeric(digit) {
     updateDisplay();
 }
 function handleOperator(op) {
-    if (!operandOne.isEmpty() && operator.isEmpty()) {
+    if (operandOne.value === '0' && operator.isEmpty && lastResult !== '') {
+        operandOne.updateValue(lastResult);
         operator.value = op;
-    } else if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
+    } else if (!operandOne.isEmpty() && operator.isEmpty()) {
+        operator.value = op;
+    } else if (canCalculate()) {
         computeResult();
         operandOne.updateValue(lastResult);
         operator.value = op;
@@ -165,11 +170,11 @@ function handleOperator(op) {
     updateDisplay();
 }
 function computeResult() {
-    if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
+    if (canCalculate()) {
         result = myCalculator.operate(operandOne.value, operandTwo.value, operator.value);
         lastResult = result;
         updateDisplay();
-        resetCalculation();
+        reset();
     }
 }
 function handleDelete() {
@@ -185,10 +190,4 @@ function handleDelete() {
         currentOperand.deleteLastDigit();
     }
     updateDisplay();
-}
-function resetCalculation() {
-    operandOne.clear();
-    operandTwo.clear();
-    operator.clear();
-    result = '';
 }
