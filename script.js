@@ -15,7 +15,7 @@ function Calculator() {
     this.operate = function (a, b, op) {
         a = Number(a);
         b = Number(b);
-        let result = null;
+        let result = '';
         switch (op) {
             case '+':
                 result = this.add(a, b);
@@ -32,9 +32,7 @@ function Calculator() {
             default:
                 break;
         }
-        if (result) {
-            return Math.round(result * 100) / 100;
-        }
+        return Math.round(result * 100) / 100;
     };
 }
 function Operand() {
