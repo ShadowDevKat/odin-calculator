@@ -15,17 +15,25 @@ function Calculator() {
     this.operate = function (a, b, op) {
         a = Number(a);
         b = Number(b);
+        let result = null;
         switch (op) {
             case '+':
-                return this.add(a, b);
+                result = this.add(a, b);
+                break;
             case '-':
-                return this.subtract(a, b);
+                result = this.subtract(a, b);
+                break;
             case '*':
-                return this.multiply(a, b);
+                result = this.multiply(a, b);
+                break;
             case '/':
-                return this.divide(a, b);
+                result = this.divide(a, b);
+                break;
             default:
                 break;
+        }
+        if (result) {
+            return Math.round(result * 100) / 100;
         }
     };
 }
@@ -180,7 +188,7 @@ function canUseOperand() {
 function handleNumeric(inputVal) {
     const currOperand = getCurrentOperand();
     if (currOperand) {
-        if(currOperand.hasDecimal() && inputVal === '.') {
+        if (currOperand.hasDecimal() && inputVal === '.') {
             return;
         }
         currOperand.updateValue(inputVal);
