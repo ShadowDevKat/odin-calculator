@@ -1,3 +1,4 @@
+//Object Constructors
 function Calculator() {
     this.add = function (a, b) {
         return a + b;
@@ -28,8 +29,33 @@ function Calculator() {
         }
     };
 }
+function Operand() {
+    this.value = '';
+    this.isEmpty = function () {
+        return this.value.length === 0;
+    }
+    this.hasDecimal = function () {
+        return this.value.indexOf('.') === -1 ? false : true;
+    }
+    this.clear = function () {
+        this.value = '';
+    }
+}
+function Operator() {
+    this.value = '';
+    this.isEmpty = function () {
+        return this.value.length === 0;
+    }
+    this.clear = function () {
+        this.value = '';
+    }
+}
 
+//Object Variables
 const myCalculator = new Calculator();
+const operandOne = new Operand();
+const operandTwo = new Operand();
+const operator = new Operator();
 
 //DOM Queries
 const display = document.querySelector('.display-area');
@@ -88,39 +114,32 @@ buttonParent.addEventListener('click', (e) => {
     }
 });
 
-let operandOne = '';
-let operandTwo = '';
-let operator = '';
-let hasOperator = false;
-
 function resetCalculation() {
-    operandOne = '';
-    operandTwo = '';
-    operator = '';
-    hasOperator = false;
+    operandOne.clear();
+    operandTwo.clear();
+    operator.clear();
 }
 
 function handleNumeric(digit) {
-    if (!hasOperator) {
-        operandOne += digit;
-        setDisplay(operandOne);
+    if(operator.isEmpty()) {
+        operandOne.value += digit;
+        setDisplay(`${operandOne.value}`);
     }
     else {
-        operandTwo += digit;
-        setDisplay(operandTwo);
+        operandTwo.value += digit;
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
     }
 }
 function handleOperator(op) {
-    if (!hasOperator && operandOne !== '') {
-        operator = op;
-        hasOperator = true;
-        setDisplay(operator)
+    if(!operandOne.isEmpty() && operator.isEmpty()) {
+        operator.value = op;
+        setDisplay(`${operandOne.value} ${operator.value}`);
     }
 }
 function computeResult() {
-    if (operandOne !== '' && hasOperator && operandTwo !== '') {
-        let result = myCalculator.operate(operandOne, operandTwo, operator);
-        setDisplay(result);
+    if (!operandOne.isEmpty() && !operator.isEmpty() && !operandTwo.isEmpty()) {
+        let result = myCalculator.operate(operandOne.value, operandTwo.value, operator.value);
+        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
         resetCalculation();
     }
 }
