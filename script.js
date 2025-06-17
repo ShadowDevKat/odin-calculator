@@ -88,7 +88,7 @@ function setCurrentDisplay(str) {
 }
 function updateDisplay() {
     if (operator.value === '') {
-        setPreviousDisplay(``);
+        setPreviousDisplay('');
         setCurrentDisplay(`${operandOne.value}`);
     }
     else if (result.length === 0) {
@@ -96,7 +96,7 @@ function updateDisplay() {
         setCurrentDisplay(`${operandTwo.value}`);
     }
     else {
-        setPreviousDisplay(``);
+        setPreviousDisplay('');
         setCurrentDisplay(`${result}`);
     }
 }
