@@ -22,14 +22,29 @@ body {
     gap: 8px;
 }
 
-.display-area {
-    flex: 1;
+.displays {
+    flex: 0.5;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
     align-items: end;
-    font-size: xx-large;
     font-weight: bold;
     padding: 16px;
+}
+
+.previous-display,
+.current-display {
+    display: flex;
+    align-items: end;
+}
+
+.previous-display {
+    flex: 1;
+    font-size: x-large;
+}
+
+.current-display {
+    flex: 2;
+    font-size: xx-large;
 }
 
 .button-area {

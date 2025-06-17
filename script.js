@@ -77,15 +77,27 @@ function Operator() {
 }
 
 //Display Methods
-const display = document.querySelector('.display-area');
-function setDisplay(str) {
-    display.textContent = str;
+const previousDisplay = document.querySelector('.previous-display');
+const currentDisplay = document.querySelector('.current-display');
+
+function setPreviousDisplay(str) {
+    previousDisplay.textContent = str;
+}
+function setCurrentDisplay(str) {
+    currentDisplay.textContent = str;
 }
 function updateDisplay() {
-    if (result.length === 0) {
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value}`);
-    } else {
-        setDisplay(`${operandOne.value} ${operator.value} ${operandTwo.value} = ${result}`);
+    if (operator.value === '') {
+        setPreviousDisplay(``);
+        setCurrentDisplay(`${operandOne.value}`);
+    }
+    else if (result.length === 0) {
+        setPreviousDisplay(`${operandOne.value} ${operator.value}`);
+        setCurrentDisplay(`${operandTwo.value}`);
+    }
+    else {
+        setPreviousDisplay(``);
+        setCurrentDisplay(`${result}`);
     }
 }
 
