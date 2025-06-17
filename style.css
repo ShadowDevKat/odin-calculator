@@ -36,39 +36,53 @@ body {
     flex: 2;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .button-row {
     flex: 1;
     display: flex;
-    gap: 4px;
-}
-
-.button-row {
-    flex-direction: row;
+    gap: 6px;
 }
 
 .input-button {
     flex: 1;
     font-size: x-large;
     font-weight: bold;
+    border: none;
     border-radius: 8px;
 }
 
-.button-style-one {
-    color: white;
-    background-color: #616161;
+.input-button:hover {
+    opacity: 0.8;
 }
 
-.button-style-two {
+.input-button:active {
+    opacity: 0.8;
+    transform: translateY(2px);
+}
+
+#emptyBtn:hover {
+    opacity: 1;
+}
+
+#emptyBtn:active {
+    transform: none;
+}
+
+.button-style-one {
     color: #0e9f45;
     background-color: #2f3135;
 }
 
-.button-style-three {
+.button-style-two {
     color: white;
     background-color: #097633;
+}
+
+.button-style-three {
+    color: white;
+    background-color: #616161;
 }
 
 .white-text {
