@@ -4,7 +4,6 @@
 
 body {
     height: 100vh;
-    background-color: lightgray;
     margin: 0;
     padding: 0;
     display: flex;
@@ -15,14 +14,16 @@ body {
 .calculator-section {
     width: 350px;
     height: 600px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 16px;
+    gap: 8px;
 }
 
 .display-area {
     flex: 1;
-    background-color: aquamarine;
     display: flex;
     justify-content: flex-end;
     align-items: end;
@@ -34,37 +35,52 @@ body {
 .button-area {
     flex: 2;
     display: flex;
-}
-
-.left-section {
-    flex: 3;
-    display: flex;
     flex-direction: column;
+    gap: 4px;
 }
 
-.right-section {
+.button-row {
     flex: 1;
     display: flex;
-}
-
-.button-row,
-.button-column {
-    flex: 1;
-    display: flex;
+    gap: 4px;
 }
 
 .button-row {
     flex-direction: row;
 }
 
-.button-column {
-    flex-direction: column;
-}
-
 .input-button {
     flex: 1;
     font-size: x-large;
     font-weight: bold;
+    border-radius: 8px;
+}
+
+.button-style-one {
+    color: white;
+    background-color: #616161;
+}
+
+.button-style-two {
+    color: #0e9f45;
+    background-color: #2f3135;
+}
+
+.button-style-three {
+    color: white;
+    background-color: #097633;
+}
+
+.white-text {
+    color: white;
+}
+
+.black-background {
+    background-color: #17191a;
+}
+
+.light-green-background {
+    background-color: #befaba;
 }
 
 div {
