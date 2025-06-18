@@ -1,3 +1,6 @@
+//Global Constant
+const MAX_CHARACTERS = 16;
+
 //Object Constructors
 function Calculator() {
     this.add = function (a, b) {
@@ -38,11 +41,15 @@ function Calculator() {
 function Operand() {
     this.value = '';
     this.updateValue = function (inputVal) {
+        if (this.value.length > MAX_CHARACTERS) return;
+
         if (inputVal === '.' && !this.isEmpty() && !this.hasDecimal()) {
             this.value += inputVal;
-        } else if (this.value.length === 1 && this.value === '0') {
+        }
+        else if (this.value.length === 1 && this.value === '0') {
             this.value = inputVal;
-        } else {
+        }
+        else {
             this.value += inputVal;
         }
     }
@@ -150,7 +157,6 @@ const methodButtons = {
     clearBtn: resetAndDisplay,
     resultBtn: computeResult,
     deleteBtn: handleDelete,
-    // emptyBtn: "",
 }
 
 buttonParent.addEventListener('click', (e) => {
